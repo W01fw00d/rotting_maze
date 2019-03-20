@@ -1,7 +1,8 @@
 function init() {
-    const mazeGenerator = new MazeGenerator();
+  const consolePainter = new ConsolePainter();
+  const mazeFactory = new MazeFactory(consolePainter);
 
-    mazeGenerator.generate(10, 10, 0.75, 0.75);
+  mazeFactory.generate(10, 10, 0.75, 0.75);
 }
 
 window.onload = init;

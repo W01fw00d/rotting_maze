@@ -1,7 +1,8 @@
 class Maze {
-  constructor(width, height) {
+  constructor(width, height, painter) {
     this.width = width;
     this.height = height;
+    this.painter = painter;
 
     this.generateEmptyMatrix(width, height);
   }
@@ -23,12 +24,6 @@ class Maze {
     this.fillRow(this.height - 1);
     this.fillColumn(0);
     this.fillColumn(this.width - 1);
-
-
-  }
-
-  generateRandomPosition(minimum, maximum) {
-    return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
   }
 
   //WIP
@@ -38,8 +33,8 @@ class Maze {
       neighbours;
 
     for (var i = 0; i < density; i++) {
-      x = this.generateRandomPosition(0, (Math.floor(shape[1] / 2) * 2) - 1);
-      y = this.generateRandomPosition(0, (Math.floor(shape[0] / 2) * 2) - 1);
+      x = this.generateRandomPosition(0, (Math.floor(shape[1] / 2)) - 1) * 2;
+      y = this.generateRandomPosition(0, (Math.floor(shape[0] / 2)) - 1) * 2;
 
       this.matrix[x][y] = 1;
 
@@ -63,21 +58,27 @@ class Maze {
         }
 
         if (neighbours.length > 0) {
-          y_, x_ = neighbours[
+          const xyVar = neighbours[
             this.generateRandomPosition(0, neighbours.length - 1)
           ];
 
+          const y_ = xyVar[0];
+          const x_ = xyVar[1];
 
+          if (this.matrix[y_, x_] == 0) {
+            this.matrix[y_, x_] = 1;
+
+            this.matrix[
+              y_ + Math.floor((y - y_) / 2),
+              x_ + Math.floor((x - x_) / 2)
+            ] = 1;
+
+            x, y = x_, y_;
+          }
         }
-
       }
     }
-
-    console.log(this.matrix);
   }
-
-
-
 
 
 
@@ -96,4 +97,22 @@ class Maze {
     }
   }
 
+  generateRandomPosition(minimum, maximum) {
+    return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+  }
+
+  paint() {
+    var height = this.matrix.length;
+
+    for (var i = 0; i < height; i++) {
+        var width = this.matrix[i].length;
+        var line = '';
+        for (var j = 0; j < width; j++) {
+            line += this.matrix[i][j];
+        }
+
+        this.painter.paint(i + '. ' + line);
+    }
+
+  }
 }

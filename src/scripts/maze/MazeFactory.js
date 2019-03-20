@@ -1,9 +1,10 @@
-class MazeGenerator {
-  constructor() {
+class MazeFactory {
+  constructor(painter) {
+    this.painter = painter;
   }
 
   generate(width, height, complexity, density) {
-    const maze = new Maze(width, height);
+    const maze = new Maze(width, height, this.painter);
 
     const shape = [
       Math.floor(height / 2) * 2 + 1,
@@ -20,7 +21,9 @@ class MazeGenerator {
 
     maze.fillBorders();
 
-    // maze.makeAisles(density, shape);
+    maze.makeAisles(shape, density, complexity);
+
+    maze.paint();
   }
 
 }
