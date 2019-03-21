@@ -4,12 +4,12 @@ class MazeFactory {
   }
 
   generate(width, height, complexity, density) {
-    const maze = new Maze(width, height, this.painter);
-
     const shape = [
       Math.floor(height / 2) * 2 + 1,
       Math.floor(width / 2) * 2 + 1
     ];
+
+    const maze = new Maze(shape[0], shape[1], this.painter);
 
     complexity = parseInt(
       complexity * (5 * (shape[0] + shape[1]))
