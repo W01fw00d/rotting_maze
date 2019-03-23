@@ -6,14 +6,12 @@ class CanvasPainter {
     wallWidth,
     outerWallWidth,
     startX,
-    startY,
-    offset
+    startY
   ) {
     this.width = width;
     this.height = height;
     this.startX = startX;
     this.startY = startY;
-    this.offset = offset;
     this.setStrokeWidths(pathWidth, wallWidth, outerWallWidth);
 
     this.setPalette();
@@ -33,10 +31,12 @@ class CanvasPainter {
     this.pathWidth = pathWidth;
     this.wallWidth = wallWidth;
     this.outerWallWidth = outerWallWidth;
+
+    this.offset = pathWidth / 2 + outerWallWidth;
   }
 
   generateBaseMaze() {
-    this.ctx = this.configCtx(
+    this.ctx = this.configContext(
       this.makeCanvas()
     );
 
@@ -57,28 +57,46 @@ class CanvasPainter {
       * (this.pathWidth + this.wallWidth) - this.wallWidth;
   }
 
-  configCtx(canvas) {
+  configContext(canvas) {
     const wallColor = this.pink.darker;
     const pathColor = this.pink.lighter;
 
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = wallColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = pathColor;
-    ctx.lineCap = 'square';
-    ctx.lineWidth = this.pathWidth;
-    ctx.beginPath();
+    const context = canvas.getContext('2d');
+    context.fillStyle = wallColor;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.strokeStyle = pathColor;
+    context.lineCap = 'square';
+    context.lineWidth = this.pathWidth;
+    context.beginPath();
 
-    ctx.moveTo(
+    context.moveTo(
       this.getPositionByStrokeWidths(this.startX),
       this.getPositionByStrokeWidths(this.startY)
     );
 
-    return ctx;
+    return context;
+  }
+
+  moveTo(position) {
+    this.ctx.moveTo(
+      this.getPositionByStrokeWidths(position[0]),
+      this.getPositionByStrokeWidths(position[1])
+    );
+  }
+
+  lineTo(direction, x, y) {
+    this.ctx.lineTo(
+      this.getPositionByStrokeWidths(direction[0] + x),
+      this.getPositionByStrokeWidths(direction[1] + y)
+    );
   }
 
   getPositionByStrokeWidths(position) {
     return position * (this.pathWidth + this.wallWidth) + this.offset;
+  }
+
+  apply() {
+    this.ctx.stroke();
   }
 
 }

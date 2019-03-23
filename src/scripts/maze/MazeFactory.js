@@ -1,18 +1,13 @@
 class MazeFactory {
   constructor() {
-    const width = 25;
-    const height = 25;
+    const width = 15;
+    const height = 30;
     const startX = width / 2 | 0;
     const startY = this.height / 2 | 0;
-    this.route = [[startX, startY]];
-    const seed = this.generateSeed();
-    this.random = this.randomGen(seed);
 
     const pathWidth = 10;
     const wallWidth = 2;
     const outerWallWidth = 2;
-
-    this.offset = pathWidth / 2 + outerWallWidth;
 
     this.painter = new CanvasPainter(
       width,
@@ -21,11 +16,10 @@ class MazeFactory {
       wallWidth,
       outerWallWidth,
       startX,
-      startY,
-      this.offset
+      startY
     );
 
-    this.ctx = this.painter.generateBaseMaze();
+    this.painter.generateBaseMaze();
 
     this.map = this.makeMap(
       width,
@@ -34,28 +28,29 @@ class MazeFactory {
       startY
     );
 
+    this.applyMazeGenerationAlgorithm(startX, startY);
+  }
+
+  applyMazeGenerationAlgorithm(startX, startY) {
+    const route = [
+      [startX, startY]
+    ];
+    const random = this.randomGen();
+    const cyclesDelay = 1;
+
     this.loop(
-      this.route,
+      route,
       this.map,
-      this.random,
-      this.ctx,
-      this.offset,
-      pathWidth,
-      wallWidth
+      random,
+      this.painter,
+      cyclesDelay
     )
   }
 
-  generateSeed() {
-    const seed = Math.random() * 100000 | 0;
+  randomGen() {
+    let seed = Math.random() * 100000 | 0;
     console.log(seed);
 
-    return seed;
-  }
-
-  randomGen(seed) {
-    if (seed === undefined) {
-      let seed = performance.now();
-    }
     return () => {
       seed = (seed * 9301 + 49297) % 233280;
       return seed / 233280;
@@ -65,7 +60,7 @@ class MazeFactory {
   makeMap(width, x, height, y){
     const map = [];
 
-    for (var i = 0; i < height * 2 ; i++) {
+    for (var i = 0; i < height * 2; i++) {
       map[i] = [];
       for (var j = 0; j < width * 2; j++) {
         map[i][j] = false;
@@ -76,14 +71,13 @@ class MazeFactory {
     return map;
   }
 
-  loop(route, map, random, ctx, offset, pathWidth, wallWidth) {
-    const cyclesDelay = 1;
+  loop(route, map, random, painter, cyclesDelay) {
     let direction;
-    const x = route[route.length-1][0] | 0;
-    const y = route[route.length-1][1] | 0;
+    const x = route[route.length - 1][0] | 0;
+    const y = route[route.length - 1][1] | 0;
 
     var directions = [
-      [1,0], [-1,0], [0,1], [0,-1]
+      [1, 0], [-1, 0], [0, 1], [0, -1]
     ],
       alternatives = [];
 
@@ -96,25 +90,18 @@ class MazeFactory {
       }
     }
 
-    if(alternatives.length === 0) {
+    if (alternatives.length === 0) {
       route.pop();
       if (route.length > 0) {
-        ctx.moveTo(
-          route[route.length - 1][0] * (pathWidth + wallWidth) + offset,
-          route[route.length - 1][1] * (pathWidth + wallWidth) + offset
-        );
+        painter.moveTo(route[route.length - 1]);
 
-        setTimeout(() => {
-          this.loop(
-            route,
-            map,
-            random,
-            ctx,
-            offset,
-            pathWidth,
-            wallWidth
-          );
-        }, cyclesDelay);
+        this.setNextLoopTimeout(
+          route,
+          map,
+          random,
+          painter,
+          cyclesDelay
+        );
       }
       return;
     }
@@ -123,25 +110,28 @@ class MazeFactory {
       [direction[0] + x,
       direction[1] + y]
     );
-    ctx.lineTo(
-      (direction[0] + x) * (pathWidth + wallWidth) + offset,
-      (direction[1] + y) * (pathWidth + wallWidth) + offset
-    );
+
+    painter.lineTo(direction, x, y);
+    painter.apply();
+
     map[(direction[1] + y) * 2][(direction[0] + x) * 2] = true;
     map[direction[1] + y * 2][direction[0] + x * 2] = true;
-    ctx.stroke();
 
+    this.setNextLoopTimeout(
+      route,
+      map,
+      random,
+      painter,
+      cyclesDelay
+    );
+  }
+
+  setNextLoopTimeout(route, map, random, painter, cyclesDelay) {
     setTimeout(() => {
-      this.loop(
-        route,
-        map,
-        random,
-        ctx,
-        offset,
-        pathWidth,
-        wallWidth
-      )
-    }, cyclesDelay);
+        this.loop(route, map, random, painter, cyclesDelay)
+      },
+      cyclesDelay
+    );
   }
 
 }
