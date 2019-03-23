@@ -1,8 +1,8 @@
 class MazeFactory {
   constructor() {
-    this.width = 25;
-    this.height = 25;
-    const startX = this.width / 2 | 0;
+    const width = 25;
+    const height = 25;
+    const startX = width / 2 | 0;
     const startY = this.height / 2 | 0;
     this.route = [[startX, startY]];
     const seed = this.generateSeed();
@@ -14,15 +14,24 @@ class MazeFactory {
 
     this.offset = pathWidth / 2 + outerWallWidth;
 
-    this.generateBaseMaze(
-      this.width,
-      this.height,
+    this.painter = new CanvasPainter(
+      width,
+      height,
       pathWidth,
       wallWidth,
       outerWallWidth,
       startX,
       startY,
       this.offset
+    );
+
+    this.ctx = this.painter.generateBaseMaze();
+
+    this.map = this.makeMap(
+      width,
+      startX,
+      height,
+      startY
     );
 
     this.loop(
@@ -53,30 +62,6 @@ class MazeFactory {
     }
   }
 
-  generateBaseMaze(width, height, pathWidth, wallWidth, outerWallWidth, startX, startY, offset) {
-    const canvas = this.makeCanvas(
-      outerWallWidth,
-      width,
-      height,
-      pathWidth,
-      wallWidth
-    );
-    this.ctx = this.configCtx(
-      canvas,
-      pathWidth,
-      wallWidth,
-      offset,
-      startX,
-      startY
-    );
-    this.map = this.makeMap(
-      width,
-      startX,
-      height,
-      startY
-    );
-  }
-
   makeMap(width, x, height, y){
     const map = [];
 
@@ -89,38 +74,6 @@ class MazeFactory {
     map[y * 2][x * 2] = true;
 
     return map;
-  }
-
-  makeCanvas(outerWallWidth, width, height, pathWidth, wallWidth) {
-    const canvas = document.querySelector('canvas');
-
-    canvas.width = outerWallWidth * 2 + width
-      * (pathWidth + wallWidth) - wallWidth;
-    canvas.height = outerWallWidth * 2 + height
-      * (pathWidth+wallWidth) - wallWidth;
-
-    return canvas;
-  }
-
-  configCtx(canvas, pathWidth, wallWidth, offset, x, y) {
-    const wallColor = '#a02040';
-    const pathColor = '#f5e8eb';
-    const cursorColor = '#d9a5b2' //TODO not used yet
-
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = wallColor;
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.strokeStyle = pathColor;
-    ctx.lineCap = 'square';
-    ctx.lineWidth = pathWidth;
-    ctx.beginPath();
-
-    ctx.moveTo(
-      x * (pathWidth + wallWidth) + offset,
-      y * (pathWidth + wallWidth) + offset
-    );
-
-    return ctx;
   }
 
   loop(route, map, random, ctx, offset, pathWidth, wallWidth) {
