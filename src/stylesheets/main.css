@@ -1,118 +1,70 @@
-@font-face {
-    font-family: 'Roman';
-    src: url('../images/fonts/roman.ttf');
-}
-
-header{
-    font-family: 'Roman';
-}
-
-.gold-label {
-    color: white;
-}
-
-table, th, td {
-    border: 1px solid rgba(111, 111, 111, .5);
-}
-
-th {
-  width: 60px;
-  height: 50px;
+body{
+  margin: 0;
+  background: #222a33;
   text-align: center;
 }
-
-img{
-    width: 100%;
-    height: 100%;
+div{
+  display: inline-block;
+  margin: 20px auto 0 auto;
+  position: relative;
 }
-
+ul{
+  position: absolute;
+  right: 0;
+  width: 220px;
+  height: 100%;
+  float: left;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  color: #eee;
+  font-family: helvetica;
+}
+li{
+  padding: 5px 5px 5px 5px;
+}
+label{
+  width: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  text-align: right;
+  padding-right: 5px;
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
 input{
-    text-align: center;
-    color: Black;
+  width: 50%;
+  height: 24px;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: #ccc;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 2px;
+  transition: background 200ms;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
 }
-
-body{
-    background: url('../images/background.jpg');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+input:focus{
+  outline: none;
+  background: #fff;
+  color: #222;
 }
-
-html {
-    height: 100%;
+input[type=button]{
+  background: #111;
+  color: #eee;
+  margin-left: 50%;
+  font-weight: normal;
+  cursor: pointer;
 }
-
-.icon {
-    position: relative;
-    /*
-    border: 1px solid rgba(111, 111, 111, .5);
-    */
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
-
-    color: White;
+input[type=button]:active{
+  transform: translate(2px,2px);
+  box-shadow: 0px 0px 0px rgba(0,0,0,0.2);
 }
-
-.container{
-    text-align: center;
-}
-
-#map{
-   position: absolute;
-   width: 425px;
-}
-
-#info {
+canvas{
+  margin-right: 220px;
   display: block;
-}
-
-#info div, form{
-    color: White;
-}
-
-#info button{
-    color: Black;
-}
-
-.hidden-div {
-    display: none;
-}
-
-#soltar{
-    display: none;
-}
-
-.padding-sm {
-    padding: 10px;
-}
-
-.padding-top-md {
-    padding-top: 20px;
-}
-
-.margin-top-md {
-    margin-top: 20px;
-}
-
-.control-bar {
-    background-color: rgba(0, 0, 0, 0.6);
-}
-
-.close-button {
-    padding: 5px;
-    margin-bottom: 15px;
-}
-
-.music-control-bar {
-    vertical-align: middle;
-}
-
-.gold-marker {
-    width: 50%;
-}
-
-.control-bar-col {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
+  float: left;
 }

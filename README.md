@@ -1,4 +1,5 @@
 # rotting_maze
 
-https://en.wikipedia.org/wiki/Maze_generation_algorithm
-https://codepen.io/GabbeV/pen/viAec
+Based on Gabriel Valfridsson's "Random Maze Generator" (https://codepen.io/GabbeV/pen/viAec)
+
+For more info about Maze Generation Algorithms: https://en.wikipedia.org/wiki/Maze_generation_algorithm

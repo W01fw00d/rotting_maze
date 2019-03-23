@@ -26,60 +26,6 @@ class Maze {
     this.fillColumn(this.width - 1);
   }
 
-  //WIP
-  makeAisles(shape, density, complexity) {
-    let x,
-      y,
-      neighbours;
-
-    for (var i = 0; i < density; i++) {
-      x = this.generateRandomPosition(0, (Math.floor(shape[1] / 2)) - 1) * 2;
-      y = this.generateRandomPosition(0, (Math.floor(shape[0] / 2)) - 1) * 2;
-
-      this.matrix[x][y] = 1;
-
-      for (var j = 0; j < complexity; j++) {
-        neighbours = [];
-
-        if (x > 1) {
-          neighbours.push([y, x - 2]);
-        }
-
-        if (x < shape[1] - 2) {
-          neighbours.push([y, x + 2]);
-        }
-
-        if (y > 1) {
-          neighbours.push([y - 2, x]);
-        }
-
-        if (y < shape[0] - 2) {
-          neighbours.push([y + 2, x]);
-        }
-
-        if (neighbours.length > 0) {
-          const xyVar = neighbours[
-            this.generateRandomPosition(0, neighbours.length - 1)
-          ];
-
-          const y_ = xyVar[0];
-          const x_ = xyVar[1];
-
-          if (this.matrix[y_, x_] == 0) {
-            this.matrix[y_, x_] = 1;
-
-            this.matrix[
-              y_ + Math.floor((y - y_) / 2),
-              x_ + Math.floor((x - x_) / 2)
-            ] = 1;
-
-            x, y = x_, y_;
-          }
-        }
-      }
-    }
-  }
-
 
 
   //PRIVATE
