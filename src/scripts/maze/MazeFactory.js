@@ -19,8 +19,10 @@ class MazeFactory {
     const delay = 1            //Delay between algorithm cycles
 
     const seed = Math.random()*100000|0//Seed for random numbers
-    const wallColor = '#d24'   //Color of the walls
-    const pathColor = '#222a33'//Color of the path
+    console.log(seed);
+    const wallColor = '	#a02040'   //Color of the walls
+    const pathColor = '#f5e8eb'//Color of the path
+    const cursorColor = '#d9a5b2' //TODO not used yet
 
     const randomGen = function(seed){
     	if(seed===undefined)var seed=performance.now()
@@ -67,50 +69,6 @@ class MazeFactory {
     const inputSeed = document.getElementById('seed')
     const buttonRandomSeed = document.getElementById('randomseed')
 
-    const settings = {
-      display: function(){
-        inputWidth.value = width
-        inputHeight.value = height
-        inputPathWidth.value = pathWidth
-        inputWallWidth.value = wall
-        inputOuterWidth.value = outerWall
-        inputPathColor.value = pathColor
-        inputWallColor.value = wallColor
-        inputSeed.value = seed
-      },
-      check: function(){
-        if(inputWidth.value != width||
-           inputHeight.value != height||
-           inputPathWidth.value != pathWidth||
-           inputWallWidth.value != wall||
-           inputOuterWidth.value != outerWall||
-           inputPathColor.value != pathColor||
-           inputWallColor.value != wallColor||
-           inputSeed.value != seed){
-          settings.update()
-        }
-      },
-      update: function(){
-        clearTimeout(timer)
-        width = parseFloat(inputWidth.value)
-        height = parseFloat(inputHeight.value)
-        pathWidth = parseFloat(inputPathWidth.value)
-        wall = parseFloat(inputWallWidth.value)
-        outerWall = parseFloat(inputOuterWidth.value)
-        pathColor = inputPathColor.value
-        wallColor = inputWallColor.value
-        seed = parseFloat(inputSeed.value)
-        x = width/2|0
-        y = height/2|0
-        init()
-        loop()
-      }
-    }
-
-    buttonRandomSeed.addEventListener('click',function(){
-      inputSeed.value = Math.random()*100000|0
-    })
-
     const loop = function(){
       x = route[route.length-1][0]|0
       y = route[route.length-1][1]|0
@@ -143,9 +101,7 @@ class MazeFactory {
       ctx.stroke()
       timer = setTimeout(loop,delay)
     }
-    settings.display()
     loop()
-    setInterval(settings.check,400)
   }
 
 }
