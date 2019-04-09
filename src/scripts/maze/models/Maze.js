@@ -59,6 +59,6 @@ class Maze {
 
         this.painter.paint(i + '. ' + line);
     }
-
   }
+
 }

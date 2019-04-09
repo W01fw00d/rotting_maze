@@ -36,15 +36,17 @@ class CanvasPainter {
   }
 
   generateBaseMaze() {
-    this.ctx = this.configContext(
-      this.makeCanvas()
+    this.left_canvas_context = this.configContext(
+      this.makeLeftCanvas()
     );
-
-    return this.ctx;
   }
 
-  makeCanvas() {
-    const canvas = document.querySelector('canvas');
+  makeLeftCanvas() {
+    return this.makeCanvas('.left_canvas');
+  }
+
+  makeCanvas(canvas_name) {
+    const canvas = document.querySelector(canvas_name);
 
     canvas.width = this.getCanvasDimensionByStrokeWidths(this.width);
     canvas.height = this.getCanvasDimensionByStrokeWidths(this.height);
@@ -78,14 +80,14 @@ class CanvasPainter {
   }
 
   moveTo(position) {
-    this.ctx.moveTo(
+    this.left_canvas_context.moveTo(
       this.getPositionByStrokeWidths(position[0]),
       this.getPositionByStrokeWidths(position[1])
     );
   }
 
   lineTo(direction, x, y) {
-    this.ctx.lineTo(
+    this.left_canvas_context.lineTo(
       this.getPositionByStrokeWidths(direction[0] + x),
       this.getPositionByStrokeWidths(direction[1] + y)
     );
@@ -96,7 +98,7 @@ class CanvasPainter {
   }
 
   apply() {
-    this.ctx.stroke();
+    this.left_canvas_context.stroke();
   }
 
 }
