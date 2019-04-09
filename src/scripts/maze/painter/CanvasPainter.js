@@ -37,12 +37,13 @@ class CanvasPainter {
 
   generateBaseMaze() {
     this.left_canvas_context = this.configContext(
-      this.makeLeftCanvas()
+      this.makeCanvas('.left_canvas')
     );
-  }
+    this.right_canvas_context = this.configContext(
+      this.makeCanvas('.right_canvas')
+    );
 
-  makeLeftCanvas() {
-    return this.makeCanvas('.left_canvas');
+    this.moveTo([this.startX, this.startY]);
   }
 
   makeCanvas(canvas_name) {
@@ -71,8 +72,23 @@ class CanvasPainter {
     context.lineWidth = this.pathWidth;
     context.beginPath();
 
+    return context;
+  }
+
+  configContextMirrored(canvas) {
+    const wallColor = this.pink.darker;
+    const pathColor = this.pink.lighter;
+
+    const context = canvas.getContext('2d');
+    context.fillStyle = wallColor;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.strokeStyle = pathColor;
+    context.lineCap = 'square';
+    context.lineWidth = this.pathWidth;
+    context.beginPath();
+
     context.moveTo(
-      this.getPositionByStrokeWidths(this.startX),
+      this.getPositionByStrokeWidths(this.width - 1 - this.startX),
       this.getPositionByStrokeWidths(this.startY)
     );
 
@@ -84,11 +100,19 @@ class CanvasPainter {
       this.getPositionByStrokeWidths(position[0]),
       this.getPositionByStrokeWidths(position[1])
     );
+    this.right_canvas_context.moveTo(
+      this.getMirroredXPositionByStrokeWidths(position[0]),
+      this.getPositionByStrokeWidths(position[1])
+    );
   }
 
   lineTo(direction, x, y) {
     this.left_canvas_context.lineTo(
       this.getPositionByStrokeWidths(direction[0] + x),
+      this.getPositionByStrokeWidths(direction[1] + y)
+    );
+    this.right_canvas_context.lineTo(
+      this.getMirroredXPositionByStrokeWidths(direction[0] + x),
       this.getPositionByStrokeWidths(direction[1] + y)
     );
   }
@@ -97,8 +121,13 @@ class CanvasPainter {
     return position * (this.pathWidth + this.wallWidth) + this.offset;
   }
 
+  getMirroredXPositionByStrokeWidths(position) {
+    return (this.width - 1 - position) * (this.pathWidth + this.wallWidth) + this.offset;
+  }
+
   apply() {
     this.left_canvas_context.stroke();
+    this.right_canvas_context.stroke();
   }
 
 }
