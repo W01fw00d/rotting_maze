@@ -40,6 +40,34 @@ class MazeFactory {
     // _ is empty, X is maze
 
     const brainTemplate = new BrainShapeTemplate();
+    console.log(brainTemplate.shape);
+console.log(brainTemplate.shapeRanges);
+    // const width = 15;
+    // const height = 30;
+
+    const startX = brainTemplate.get(0).width / 2 | 0;
+    const startY = this.height / 2 | 0;
+
+    this.painter = new CanvasPainter(
+      width,
+      height,
+      this.pathWidth,
+      this.wallWidth,
+      this.outerWallWidth,
+      startX,
+      startY
+    );
+
+    this.painter.generateBaseMaze();
+
+    this.map = this.makeMap(
+      width,
+      startX,
+      height,
+      startY
+    );
+
+    this.applyMazeGenerationAlgorithm(startX, startY);
   }
 
   applyMazeGenerationAlgorithm(startX, startY) {
