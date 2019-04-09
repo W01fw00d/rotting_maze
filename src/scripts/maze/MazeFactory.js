@@ -1,20 +1,22 @@
 class MazeFactory {
   constructor() {
+    this.pathWidth = 10;
+    this.wallWidth = 2;
+    this.outerWallWidth = 2;
+  }
+
+  defaultStructureConstructor() {
     const width = 15;
     const height = 30;
     const startX = width / 2 | 0;
     const startY = this.height / 2 | 0;
 
-    const pathWidth = 10;
-    const wallWidth = 2;
-    const outerWallWidth = 2;
-
     this.painter = new CanvasPainter(
       width,
       height,
-      pathWidth,
-      wallWidth,
-      outerWallWidth,
+      this.pathWidth,
+      this.wallWidth,
+      this.outerWallWidth,
       startX,
       startY
     );
@@ -29,6 +31,15 @@ class MazeFactory {
     );
 
     this.applyMazeGenerationAlgorithm(startX, startY);
+  }
+
+  brainStructureConstructor() {
+    // const width = 15;
+    // const height = 30;
+
+    // _ is empty, X is maze
+
+    const brainTemplate = new BrainShapeTemplate();
   }
 
   applyMazeGenerationAlgorithm(startX, startY) {
