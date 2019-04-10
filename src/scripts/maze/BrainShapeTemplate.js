@@ -1,7 +1,10 @@
 class BrainShapeTemplate {
   constructor() {
-    this.shape = [
-      '__XXXXXXXXXXX__',
+    this.height = 30;
+    this.maxWidth = 15;
+
+    this.leftShape = [
+      '____XXXXXXXXXX_',
       'XXXXXXXXXXXXXXX',
       'XXXXXXXXXXXXXXX',
       'XXXXXXXXXXXXXXX',
@@ -38,17 +41,30 @@ class BrainShapeTemplate {
       'XXXXXXXXXXXXXXX',
     ];
 
-    this.shapeRanges = this.calculateShapeRanges();
+    this.leftShapeRanges = this.calculateShapeRanges(this.leftShape);
+
+    this.rightShape = this.generateRightShape(this.leftShape);
+    this.rightShapeRanges = this.calculateShapeRanges(this.rightShape);
   }
 
-  calculateShapeRanges() {
+  generateRightShape(shape) {
+    let rightShape = [];
+
+    shape.forEach((row) => {
+      rightShape.push(this.reverse(row));
+    });
+
+    return rightShape;
+  }
+
+  calculateShapeRanges(shape) {
     let shapeRanges = [];
 
     let fromLimit;
     let toLimit;
     let range;
 
-    this.shape.forEach((row) => {
+    shape.forEach((row) => {
       fromLimit = row.indexOf('X');
 
       toLimit = row
@@ -66,12 +82,17 @@ class BrainShapeTemplate {
     return shapeRanges;
   }
 
-  get(index) {
-    return this.shape[index];
+  getLeft(index) {
+    return this.leftShape[index];
   }
 
-  getRange(index) {
-    return this.shapeRanges[index]
+  getLeftRange(index) {
+    return this.leftShapeRanges[index]
+  }
+
+  //TODO move to an utils?
+  reverse(string) {
+    return string.split('').reverse().join('');
   }
 
 }

@@ -39,18 +39,16 @@ class MazeFactory {
 
     // _ is empty, X is maze
 
-    const brainTemplate = new BrainShapeTemplate();
-    console.log(brainTemplate.shape);
-console.log(brainTemplate.shapeRanges);
+    const template = new BrainShapeTemplate();
     // const width = 15;
     // const height = 30;
 
-    const startX = brainTemplate.get(0).width / 2 | 0;
-    const startY = this.height / 2 | 0;
+    const startX = template.getLeftRange(0)[0] + brainTemplate.getLeftRange(0)[1] / 2 | 0;
+    const startY = template.height / 2 | 0;
 
     this.painter = new CanvasPainter(
-      width,
-      height,
+      template.maxWidth,
+      template.height,
       this.pathWidth,
       this.wallWidth,
       this.outerWallWidth,
@@ -60,6 +58,14 @@ console.log(brainTemplate.shapeRanges);
 
     this.painter.generateBaseMaze();
 
+
+    let y = 0;
+    this.template.leftShapeRanges.forEach((rowRange) => {
+      this.painter.moveTo()
+    });
+
+    this.painter.
+
     this.map = this.makeMap(
       width,
       startX,
@@ -67,7 +73,7 @@ console.log(brainTemplate.shapeRanges);
       startY
     );
 
-    this.applyMazeGenerationAlgorithm(startX, startY);
+    // this.applyMazeGenerationAlgorithm(startX, startY);
   }
 
   applyMazeGenerationAlgorithm(startX, startY) {

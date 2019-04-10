@@ -46,6 +46,17 @@ class CanvasPainter {
     this.moveTo([this.startX, this.startY]);
   }
 
+  generateBaseShapedMaze(leftShape, rightShape) {
+    this.left_canvas_context = this.configContext(
+      this.makeCanvas('.left_canvas')
+    );
+    this.right_canvas_context = this.configContext(
+      this.makeCanvas('.right_canvas')
+    );
+
+    this.moveTo([this.startX, this.startY]);
+  }
+
   makeCanvas(canvas_name) {
     const canvas = document.querySelector(canvas_name);
 
@@ -65,34 +76,25 @@ class CanvasPainter {
     const pathColor = this.pink.lighter;
 
     const context = canvas.getContext('2d');
-    context.fillStyle = wallColor;
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    context.strokeStyle = pathColor;
-    context.lineCap = 'square';
-    context.lineWidth = this.pathWidth;
-    context.beginPath();
+
+    this.paintSquare(
+      context,
+      [0, 0, canvas.width, canvas.height],
+      wallColor,
+      pathColor,
+      this.pathWidth
+    );
 
     return context;
   }
 
-  configContextMirrored(canvas) {
-    const wallColor = this.pink.darker;
-    const pathColor = this.pink.lighter;
-
-    const context = canvas.getContext('2d');
+  paintSquare(context, limits, wallColor, pathColor, lineWitdh) {
     context.fillStyle = wallColor;
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillRect(limits[0], limits[1], limits[2], limits[3]);
     context.strokeStyle = pathColor;
     context.lineCap = 'square';
-    context.lineWidth = this.pathWidth;
+    context.lineWidth = lineWitdh;
     context.beginPath();
-
-    context.moveTo(
-      this.getPositionByStrokeWidths(this.width - 1 - this.startX),
-      this.getPositionByStrokeWidths(this.startY)
-    );
-
-    return context;
   }
 
   moveTo(position) {
