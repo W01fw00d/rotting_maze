@@ -1,5 +1,6 @@
 class BrainShapeTemplate {
   constructor() {
+    // _ is empty, X is maze
     this.height = 30;
     this.maxWidth = 15;
 

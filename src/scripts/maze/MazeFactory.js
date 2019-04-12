@@ -13,115 +13,85 @@ class MazeFactory {
     const startX = width / 2 | 0;
     const startY = height / 2 | 0;
 
-    this.setLeftCanvasPainter(
-      width,
-      height,
-      startX,
-      startY
-    );
-    this.setRightCanvasPainter(
-      width,
-      height,
-      startX,
-      startY
-    );
+    this.painters = [
+      this.makeLeftCanvasPainter(width, height, startX, startY),
+      this.makeRightCanvasPainter(width, height, startX, startY)
+    ];
+    this.painters.forEach((painter) => {
+      painter.paintAllCanvasWithWalls();
+    });
 
-    this.map = this.makeMap(
-      width,
-      height,
-      startX,
-      startY
-    );
+    this.map = this.makeMap(width, height, startX, startY);
 
     this.applyMazeGenerationAlgorithm(startX, startY);
   }
 
-  setLeftCanvasPainter(
-    width,
-    height,
-    startX,
-    startY
-  ) {
-    this.leftPainter = new CanvasPainter(
-      '.left_canvas',
-      width,
-      height,
-      this.pathWidth,
-      this.wallWidth,
-      this.outerWallWidth,
-      startX,
-      startY
-    );
-    this.leftPainter.generateBaseMaze();
-    this.leftPainter.paintAllCanvasWithWalls();
-    this.leftPainter.moveTo([startX, startY]);
-  }
-
-  setRightCanvasPainter(
-    width,
-    height,
-    startX,
-    startY
-  ) {
-    this.rightPainter = new MirroredCanvasPainter(
-      '.right_canvas',
-      width,
-      height,
-      this.pathWidth,
-      this.wallWidth,
-      this.outerWallWidth,
-      startX,
-      startY
-    );
-    this.rightPainter.generateBaseMaze();
-    this.rightPainter.paintAllCanvasWithWalls();
-    this.rightPainter.moveTo([startX, startY]);
-  }
-
   brainStructureConstructor() {
-    // const width = 15;
-    // const height = 30;
-
-    // _ is empty, X is maze
-
     const template = new BrainShapeTemplate();
-    // const width = 15;
-    // const height = 30;
+    const width = 15;
+    const height = 30;
 
     const startX = template.getLeftRange(0)[0] + template.getLeftRange(0)[1] / 2 | 0;
     const startY = template.height / 2 | 0;
 
-    this.setLeftCanvasPainter(
-      width,
-      height,
-      startX,
-      startY
-    );
-    this.setRightCanvasPainter(
-      width,
-      height,
-      startX,
-      startY
-    );
-
+    this.painters = [
+      this.makeLeftCanvasPainter(width, height, startX, startY),
+      this.makeRightCanvasPainter(width, height, startX, startY)
+    ];
 
     //paint maze shape manually
     let y = 0;
-    this.template.leftShapeRanges.forEach((rowRange) => {
-      this.painter.moveTo()
+    template.leftShapeRanges.forEach((rowRange) => {
+
+      // console.log(rowRange);
+
+      this.painters.forEach((painter) => {
+        painter.paintRowWallSpace([rowRange[0], y, rowRange[1]]);
+      });
+
+      y++;
     });
 
-    // this.painter.
-
-    this.map = this.makeMap(
-      width,
-      height,
-      startX,
-      startY
-    );
-
+    // this.map = this.makeMap(width, height, startX, startY);
     // this.applyMazeGenerationAlgorithm(startX, startY);
   }
+s
+  //TODO refactor those 2 methods to avoid cpde duplication
+    makeLeftCanvasPainter(width, height, startX, startY) {
+      const painter = new CanvasPainter(
+        '.left_canvas',
+        width,
+        height,
+        this.pathWidth,
+        this.wallWidth,
+        this.outerWallWidth,
+        startX,
+        startY
+      );
+      painter.generateBaseMaze();
+      // painter.paintAllCanvasWithWalls();
+      painter.moveTo([startX, startY]);
+
+      return painter;
+    }
+
+    makeRightCanvasPainter(width, height, startX, startY) {
+      const painter = new MirroredCanvasPainter(
+        '.right_canvas',
+        width,
+        height,
+        this.pathWidth,
+        this.wallWidth,
+        this.outerWallWidth,
+        startX,
+        startY
+      );
+      painter.generateBaseMaze();
+      // painter.paintAllCanvasWithWalls();
+      painter.moveTo([startX, startY]);
+
+      return painter;
+    }
 
   applyMazeGenerationAlgorithm(startX, startY) {
     const route = [
@@ -134,7 +104,7 @@ class MazeFactory {
       route,
       this.map,
       random,
-      [this.leftPainter, this.rightPainter],
+      this.painters,
       cyclesDelay
     )
   }

@@ -21,6 +21,17 @@ class MirroredCanvasPainter extends CanvasPainter {
     );
   }
 
+  paintRowWallSpace(limits) {
+    const addaptedLimits = [
+      this.getPositionByStrokeWidths(this.width - limits[2]),
+      this.getPositionByStrokeWidths(limits[1]),
+      this.getPositionByStrokeWidths(this.width - limits[0]),
+      this.getPositionByStrokeWidths(1)
+    ];
+
+    this.paintSquare(this.pink.darker, addaptedLimits);
+  }
+
   moveTo(position) {
     this.context.moveTo(
       this.getPositionByStrokeWidths(this.width - 1 - position[0]),

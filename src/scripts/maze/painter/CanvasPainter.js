@@ -27,6 +27,8 @@ class CanvasPainter {
       light: '#ecd2d8',
       lighter: '#f5e8eb'
     }
+
+    // this.white = '#FFFFFF';
   }
 
   setStrokeWidths(pathWidth, wallWidth, outerWallWidth) {
@@ -57,23 +59,38 @@ class CanvasPainter {
   }
 
   configContext(canvas) {
+    const pathColor = this.pink.lighter;
+
     const context = canvas.getContext('2d');
+    context.strokeStyle = pathColor;
 
     return context;
   }
 
   paintAllCanvasWithWalls() {
     const wallColor = this.pink.darker;
-    const pathColor = this.pink.lighter;
     const limits = [0, 0, this.canvas.width, this.canvas.height];
 
-    this.paintSquare(wallColor, pathColor, limits);
+    this.paintSquare(wallColor, limits);
   }
 
-  paintSquare(wallColor, pathColor, limits) {
+  paintRowWallSpace(limits) {
+    console.log(limits);
+    limits[0] = this.getPositionByStrokeWidths(limits[0])
+    limits[1] = this.getPositionByStrokeWidths(limits[1])
+    limits[2] = this.getPositionByStrokeWidths(limits[2])
+    limits[3] = this.getPositionByStrokeWidths(1);
+    this.paintSquare(this.pink.darker, limits);
+  }
+
+  // paintRowEmptySpace(limits) {
+  //   limits[3] = this.canvas.height;
+  //   this.paintSquare(this.white, limits);
+  // }
+
+  paintSquare(wallColor, limits) {
     this.context.fillStyle = wallColor;
     this.context.fillRect(limits[0], limits[1], limits[2], limits[3]);
-    this.context.strokeStyle = pathColor;
     this.context.lineCap = 'square';
     this.context.lineWidth = this.pathWidth;
     this.context.beginPath();
