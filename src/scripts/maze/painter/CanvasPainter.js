@@ -15,6 +15,7 @@ class CanvasPainter {
     this.startX = startX;
     this.startY = startY;
     this.setStrokeWidths(pathWidth, wallWidth, outerWallWidth);
+    this.outerWallWidth = outerWallWidth;
 
     this.setPalette();
   }
@@ -74,19 +75,21 @@ class CanvasPainter {
     this.paintSquare(wallColor, limits);
   }
 
+  // limits = [xUpperLeft, yUpperLeft, width, height]
   paintRowWallSpace(limits) {
-    console.log(limits);
-    limits[0] = this.getPositionByStrokeWidths(limits[0])
-    limits[1] = this.getPositionByStrokeWidths(limits[1])
-    limits[2] = this.getPositionByStrokeWidths(limits[2])
-    limits[3] = this.getPositionByStrokeWidths(1);
-    this.paintSquare(this.pink.darker, limits);
+    const addaptedLimits = [
+      this.getCanvasPosition(limits[0]),
+      this.getCanvasPosition(limits[1]),
+      this.getCanvasPosition(limits[2] - limits[0]) + this.outerWallWidth,
+      this.getCanvasPosition(1)
+    ];
+
+    this.paintSquare(this.pink.darker, addaptedLimits);
   }
 
-  // paintRowEmptySpace(limits) {
-  //   limits[3] = this.canvas.height;
-  //   this.paintSquare(this.white, limits);
-  // }
+  getCanvasPosition(position) {
+    return position * (this.pathWidth + this.wallWidth)
+  }
 
   paintSquare(wallColor, limits) {
     this.context.fillStyle = wallColor;

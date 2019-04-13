@@ -5,47 +5,42 @@ class BrainShapeTemplate {
     this.maxWidth = 15;
 
     this.leftShape = [
-      '____XXXXXXXXXX_',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
-      'XXXXXXXXXXXXXXX',
+      '_________XXXX__',
+      '_______XXXXXXX_',
+      '______XXXXXXXXX',
+      '_____XXXXXXXXXX',
+      '_____XXXXXXXXXX',
+      '____XXXXXXXXXXX',
+      '____XXXXXXXXXXX',
+      '___XXXXXXXXXXXX',
+      '___XXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXX',
+      '___XXXXXXXXXXXX',
+      '___XXXXXXXXXXXX',
+      '____XXXXXXXXXXX',
+      '____XXXXXXXXXXX',
+      '_____XXXXXXXXXX',
+      '______XXXXXXXXX',
+      '_______XXXXXXXX',
+      '________XXXXXX_',
+      '_________XXXX__',
     ];
 
     this.leftShapeRanges = this.calculateShapeRanges(this.leftShape);
 
-    this.rightShape = this.generateRightShape(this.leftShape);
-    this.rightShapeRanges = this.calculateShapeRanges(this.rightShape);
+    // this.rightShape = this.generateRightShape(this.leftShape);
+    // this.rightShapeRanges = this.calculateShapeRanges(this.rightShape);
   }
 
   generateRightShape(shape) {
@@ -69,14 +64,14 @@ class BrainShapeTemplate {
       fromLimit = row.indexOf('X');
 
       toLimit = row
-        .substring(fromLimit, row.length - 1)
+        .substring(fromLimit, row.length)
         .indexOf('_');
 
       shapeRanges.push([
         fromLimit,
         toLimit < 0
-          ? row.length - 1
-          : toLimit
+          ? row.length
+          : toLimit  + fromLimit
         ]);
     });
 

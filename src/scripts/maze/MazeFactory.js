@@ -2,23 +2,24 @@ class MazeFactory {
   constructor() {
     this.pathWidth = 10;
     this.wallWidth = 2;
-    this.outerWallWidth = 2;
   }
 
   defaultStructureConstructor() {
     const width = 15;
     const height = 30;
+    const outerWallWidth = 2;
 
     //TODO Make the start point random ?
     const startX = width / 2 | 0;
     const startY = height / 2 | 0;
 
     this.painters = [
-      this.makeLeftCanvasPainter(width, height, startX, startY),
-      this.makeRightCanvasPainter(width, height, startX, startY)
+      this.makeLeftCanvasPainter(width, height, startX, startY, outerWallWidth),
+      this.makeRightCanvasPainter(width, height, startX, startY, outerWallWidth)
     ];
     this.painters.forEach((painter) => {
       painter.paintAllCanvasWithWalls();
+      painter.moveTo([startX, startY]);
     });
 
     this.map = this.makeMap(width, height, startX, startY);
@@ -30,65 +31,61 @@ class MazeFactory {
     const template = new BrainShapeTemplate();
     const width = 15;
     const height = 30;
+    const outerWallWidth = 2;
 
     const startX = template.getLeftRange(0)[0] + template.getLeftRange(0)[1] / 2 | 0;
     const startY = template.height / 2 | 0;
 
     this.painters = [
-      this.makeLeftCanvasPainter(width, height, startX, startY),
-      this.makeRightCanvasPainter(width, height, startX, startY)
+      this.makeLeftCanvasPainter(width, height, startX, startY, outerWallWidth),
+      this.makeRightCanvasPainter(width, height, startX, startY, outerWallWidth)
     ];
 
-    //paint maze shape manually
-    let y = 0;
-    template.leftShapeRanges.forEach((rowRange) => {
-
-      // console.log(rowRange);
-
-      this.painters.forEach((painter) => {
-        painter.paintRowWallSpace([rowRange[0], y, rowRange[1]]);
-      });
-
-      y++;
-    });
+    this.paintCanvasByShape(template);
 
     // this.map = this.makeMap(width, height, startX, startY);
     // this.applyMazeGenerationAlgorithm(startX, startY);
   }
-s
+
+  paintCanvasByShape(template) {
+    let y = 0;
+    template.leftShapeRanges.forEach((rowRange) => {
+      this.painters.forEach((painter) => {
+        painter.paintRowWallSpace([rowRange[0], y, rowRange[1]]);
+      });
+      y++;
+    });
+  }
+
   //TODO refactor those 2 methods to avoid cpde duplication
-    makeLeftCanvasPainter(width, height, startX, startY) {
+    makeLeftCanvasPainter(width, height, startX, startY, outerWallWidth) {
       const painter = new CanvasPainter(
         '.left_canvas',
         width,
         height,
         this.pathWidth,
         this.wallWidth,
-        this.outerWallWidth,
+        outerWallWidth,
         startX,
         startY
       );
       painter.generateBaseMaze();
-      // painter.paintAllCanvasWithWalls();
-      painter.moveTo([startX, startY]);
 
       return painter;
     }
 
-    makeRightCanvasPainter(width, height, startX, startY) {
+    makeRightCanvasPainter(width, height, startX, startY, outerWallWidth) {
       const painter = new MirroredCanvasPainter(
         '.right_canvas',
         width,
         height,
         this.pathWidth,
         this.wallWidth,
-        this.outerWallWidth,
+        outerWallWidth,
         startX,
         startY
       );
       painter.generateBaseMaze();
-      // painter.paintAllCanvasWithWalls();
-      painter.moveTo([startX, startY]);
 
       return painter;
     }
