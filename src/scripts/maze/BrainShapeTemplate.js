@@ -2,39 +2,39 @@ class BrainShapeTemplate {
   constructor() {
     // _ is empty, X is maze
     this.height = 30;
-    this.maxWidth = 15;
+    this.maxWidth = 16;
 
     this.leftShape = [
-      '_________XXXX__',
-      '_______XXXXXXX_',
-      '______XXXXXXXXX',
-      '_____XXXXXXXXXX',
-      '_____XXXXXXXXXX',
-      '____XXXXXXXXXXX',
-      '____XXXXXXXXXXX',
-      '___XXXXXXXXXXXX',
-      '___XXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '__XXXXXXXXXXXXX',
-      '___XXXXXXXXXXXX',
-      '___XXXXXXXXXXXX',
-      '____XXXXXXXXXXX',
-      '____XXXXXXXXXXX',
-      '_____XXXXXXXXXX',
-      '______XXXXXXXXX',
-      '_______XXXXXXXX',
-      '________XXXXXX_',
-      '_________XXXX__',
+      '_________XXXXX__',
+      '_______XXXXXXXX_',
+      '______XXXXXXXXXX',
+      '_____XXXXXXXXXXX',
+      '_____XXXXXXXXXXX',
+      '____XXXXXXXXXXXX',
+      '____XXXXXXXXXXXX',
+      '___XXXXXXXXXXXXX',
+      '___XXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '__XXXXXXXXXXXXXX',
+      '___XXXXXXXXXXXXX',
+      '___XXXXXXXXXXXXX',
+      '____XXXXXXXXXXXX',
+      '____XXXXXXXXXXXX',
+      '_____XXXXXXXXXXX',
+      '______XXXXXXXXXX',
+      '_______XXXXXXXXX',
+      '________XXXXXXX_',
+      '_________XXXXX__',
     ];
 
     this.leftShapeRanges = this.calculateShapeRanges(this.leftShape);
@@ -69,9 +69,9 @@ class BrainShapeTemplate {
 
       shapeRanges.push([
         fromLimit,
-        toLimit < 0
+        (toLimit < 0
           ? row.length
-          : toLimit  + fromLimit
+          : toLimit + fromLimit) - 1
         ]);
     });
 

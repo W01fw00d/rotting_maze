@@ -81,7 +81,7 @@ class CanvasPainter {
       this.getCanvasPosition(limits[0]),
       this.getCanvasPosition(limits[1]),
       this.getCanvasPosition(limits[2] - limits[0]) + this.outerWallWidth,
-      this.getCanvasPosition(1)
+      this.getCanvasPosition(1) + this.outerWallWidth
     ];
 
     this.paintSquare(this.pink.darker, addaptedLimits);
