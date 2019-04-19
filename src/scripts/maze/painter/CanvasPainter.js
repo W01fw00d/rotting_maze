@@ -1,5 +1,6 @@
 class CanvasPainter {
   constructor(
+    selector,
     width,
     height,
     pathWidth,
@@ -8,11 +9,13 @@ class CanvasPainter {
     startX,
     startY
   ) {
+    this.selector = selector;
     this.width = width;
     this.height = height;
     this.startX = startX;
     this.startY = startY;
     this.setStrokeWidths(pathWidth, wallWidth, outerWallWidth);
+    this.outerWallWidth = outerWallWidth;
 
     this.setPalette();
   }
@@ -25,6 +28,8 @@ class CanvasPainter {
       light: '#ecd2d8',
       lighter: '#f5e8eb'
     }
+
+    // this.white = '#FFFFFF';
   }
 
   setStrokeWidths(pathWidth, wallWidth, outerWallWidth) {
@@ -36,14 +41,8 @@ class CanvasPainter {
   }
 
   generateBaseMaze() {
-    this.left_canvas_context = this.configContext(
-      this.makeCanvas('.left_canvas')
-    );
-    this.right_canvas_context = this.configContext(
-      this.makeCanvas('.right_canvas')
-    );
-
-    this.moveTo([this.startX, this.startY]);
+    this.canvas = this.makeCanvas(this.selector);
+    this.context = this.configContext(this.canvas);
   }
 
   makeCanvas(canvas_name) {
@@ -61,58 +60,55 @@ class CanvasPainter {
   }
 
   configContext(canvas) {
-    const wallColor = this.pink.darker;
     const pathColor = this.pink.lighter;
 
     const context = canvas.getContext('2d');
-    context.fillStyle = wallColor;
-    context.fillRect(0, 0, canvas.width, canvas.height);
     context.strokeStyle = pathColor;
-    context.lineCap = 'square';
-    context.lineWidth = this.pathWidth;
-    context.beginPath();
 
     return context;
   }
 
-  configContextMirrored(canvas) {
+  paintAllCanvasWithWalls() {
     const wallColor = this.pink.darker;
-    const pathColor = this.pink.lighter;
+    const limits = [0, 0, this.canvas.width, this.canvas.height];
 
-    const context = canvas.getContext('2d');
-    context.fillStyle = wallColor;
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    context.strokeStyle = pathColor;
-    context.lineCap = 'square';
-    context.lineWidth = this.pathWidth;
-    context.beginPath();
+    this.paintSquare(wallColor, limits);
+  }
 
-    context.moveTo(
-      this.getPositionByStrokeWidths(this.width - 1 - this.startX),
-      this.getPositionByStrokeWidths(this.startY)
-    );
+  // limits = [xUpperLeft, yUpperLeft, width, height]
+  paintRowWallSpace(limits) {
+    const addaptedLimits = [
+      this.getCanvasPosition(limits[0]),
+      this.getCanvasPosition(limits[1]),
+      this.getCanvasPosition(limits[2] - limits[0]) + this.outerWallWidth,
+      this.getCanvasPosition(1) + this.outerWallWidth
+    ];
 
-    return context;
+    this.paintSquare(this.pink.darker, addaptedLimits);
+  }
+
+  getCanvasPosition(position) {
+    return position * (this.pathWidth + this.wallWidth)
+  }
+
+  paintSquare(wallColor, limits) {
+    this.context.fillStyle = wallColor;
+    this.context.fillRect(limits[0], limits[1], limits[2], limits[3]);
+    this.context.lineCap = 'square';
+    this.context.lineWidth = this.pathWidth;
+    this.context.beginPath();
   }
 
   moveTo(position) {
-    this.left_canvas_context.moveTo(
+    this.context.moveTo(
       this.getPositionByStrokeWidths(position[0]),
-      this.getPositionByStrokeWidths(position[1])
-    );
-    this.right_canvas_context.moveTo(
-      this.getMirroredXPositionByStrokeWidths(position[0]),
       this.getPositionByStrokeWidths(position[1])
     );
   }
 
   lineTo(direction, x, y) {
-    this.left_canvas_context.lineTo(
+    this.context.lineTo(
       this.getPositionByStrokeWidths(direction[0] + x),
-      this.getPositionByStrokeWidths(direction[1] + y)
-    );
-    this.right_canvas_context.lineTo(
-      this.getMirroredXPositionByStrokeWidths(direction[0] + x),
       this.getPositionByStrokeWidths(direction[1] + y)
     );
   }
@@ -121,13 +117,8 @@ class CanvasPainter {
     return position * (this.pathWidth + this.wallWidth) + this.offset;
   }
 
-  getMirroredXPositionByStrokeWidths(position) {
-    return (this.width - 1 - position) * (this.pathWidth + this.wallWidth) + this.offset;
-  }
-
   apply() {
-    this.left_canvas_context.stroke();
-    this.right_canvas_context.stroke();
+    this.context.stroke();
   }
 
 }
