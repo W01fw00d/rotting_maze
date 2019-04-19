@@ -17,12 +17,7 @@ canvas {
 .title {
   color: #a02040;
 }
-.title1 {
-  margin-left: 71px;
-}
-.title2 {
-  margin-left: 98px;
-}
-.title3 {
-  margin-left: 162px;
+
+.button_wrapper {
+  display: block;
 }

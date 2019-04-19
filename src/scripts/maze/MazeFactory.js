@@ -2,7 +2,7 @@ class MazeFactory {
   constructor() {
     this.pathWidth = 10;
     this.wallWidth = 2;
-    this.delayMilliseconds = 1; //3000 1
+    this.delayMilliseconds = 100; //3000 1
   }
 
   defaultStructureConstructor() {
@@ -11,21 +11,21 @@ class MazeFactory {
     const outerWallWidth = 2;
 
     //TODO Make the start point random ?
-    const startX = width / 2 | 0;
-    const startY = height / 2 | 0;
+    this.startX = width / 2 | 0;
+    this.startY = height / 2 | 0;
 
     this.painters = [
-      this.makeLeftCanvasPainter(width, height, startX, startY, outerWallWidth),
-      this.makeRightCanvasPainter(width, height, startX, startY, outerWallWidth)
+      this.makeLeftCanvasPainter(width, height, this.startX, this.startY, outerWallWidth),
+      this.makeRightCanvasPainter(width, height, this.startX, this.startY, outerWallWidth)
     ];
     this.painters.forEach((painter) => {
       painter.paintAllCanvasWithWalls();
-      painter.moveTo([startX, startY]);
+      painter.moveTo([this.startX, this.startY]);
     });
 
-    this.map = this.makeMap(width, height, startX, startY);
+    this.map = this.makeMap(width, height, this.startX, this.startY);
 
-    this.applyMazeGenerationAlgorithm(startX, startY);
+    this.applyMazeGenerationAlgorithm();
   }
 
   brainStructureConstructor() {
@@ -37,30 +37,29 @@ class MazeFactory {
     const middleBrainRow = template
       .getLeftRange(Math.floor((template.height - 1) / 2))
 
-    const startX = (middleBrainRow[0] + middleBrainRow[1]) / 2
+    this.startX = (middleBrainRow[0] + middleBrainRow[1]) / 2
       | 0;
-    const startY = template.height / 2 | 0;
+    this.startY = template.height / 2 | 0;
 
     this.painters = [
-      this.makeLeftCanvasPainter(width, height, startX, startY, outerWallWidth),
-      this.makeRightCanvasPainter(width, height, startX, startY, outerWallWidth)
+      this.makeLeftCanvasPainter(width, height, this.startX, this.startY, outerWallWidth),
+      this.makeRightCanvasPainter(width, height, this.startX, this.startY, outerWallWidth)
     ];
 
     this.paintCanvasByShape(template);
 
     this.painters.forEach((painter) => {
-      painter.moveTo([startX, startY]);
+      painter.moveTo([this.startX, this.startY]);
     });
 
     this.map = this.makeShapedMazeMap(
       template.leftShapeRanges,
       template.maxWidth,
-      startX,
-      startY
+      this.startX,
+      this.startY
     );
     // console.log(this.map);
-
-    this.applyMazeGenerationAlgorithm(startX, startY);
+    //this.applyMazeGenerationAlgorithm();
   }
 
   paintCanvasByShape(template) {
@@ -106,9 +105,9 @@ class MazeFactory {
       return painter;
     }
 
-  applyMazeGenerationAlgorithm(startX, startY) {
+  applyMazeGenerationAlgorithm() {
     const route = [
-      [startX, startY]
+      [this.startX, this.startY]
     ];
     const random = this.randomGen();
     const cyclesDelay = this.delayMilliseconds;

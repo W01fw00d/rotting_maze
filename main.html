@@ -7,14 +7,25 @@
   </head>
 
   <body>
-    <h3 class="title title1">Esos Pinky | Cerebro exploraron</h3>
-    <h2 class="title title2">por la Bella | Casablanca andaron,</h2>
-    <h1 class="title title3">Del Paraíso | Locura se enamoraron.</h1>
+    <audio id="brain_song">
+      <source src="audio/brain.mp3" type="audio/mp3">
+    </audio>
+
+    <h3 class="title title1">A Pinky y Cerebro</h3>
+    <h2 class="title title2">Casablanca les recordó a</h2>
+    <h1 class="title title3">Laberintos de su infancia</h1>
 
     <div class="canvas_wrapper">
       <canvas class="left_canvas"></canvas>
       <canvas class="right_canvas"></canvas>
     </div>
+
+    <div class="button_wrapper">
+      <button onclick="playAudio()" type="button">
+        Explorar la ciudad
+      </button>
+    </div>
+
   </body>
 
 
