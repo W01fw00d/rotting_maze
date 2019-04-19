@@ -48,6 +48,10 @@ class MazeFactory {
 
     this.paintCanvasByShape(template);
 
+    this.painters.forEach((painter) => {
+      painter.moveTo([startX, startY]);
+    });
+
     this.map = this.makeShapedMazeMap(
       template.leftShapeRanges,
       template.maxWidth,
@@ -55,7 +59,7 @@ class MazeFactory {
       startY
     );
 
-    this.applyShapedMazeGenerationAlgorithm(startX, startY);
+    this.applyMazeGenerationAlgorithm(startX, startY);
   }
 
   paintCanvasByShape(template) {
@@ -117,22 +121,6 @@ class MazeFactory {
     )
   }
 
-  applyShapedMazeGenerationAlgorithm(startX, startY) {
-    const route = [
-      [startX, startY]
-    ];
-    const random = this.randomGen();
-    const cyclesDelay = this.delayMilliseconds;
-
-    this.loopShapedMaze(
-      route,
-      this.map,
-      random,
-      this.painters,
-      cyclesDelay
-    )
-  }
-
   randomGen() {
     let seed = Math.random() * 100000 | 0;
     // console.log(seed);
@@ -164,21 +152,24 @@ class MazeFactory {
     let currentRange;
 
     for (var i = 0; i < height; i++) {
-      map[i] = [];
+      map.push([]);
+      map.push([]);
 
-      for (var j = 0; j < width; j++) {
-
+      for (var j = 0; j < width * 2; j++) {
         if (
-          ranges[i][0] <= j
-          && j <= ranges[i][1]
+          (ranges[i][0] * 2) <= j
+          && j <= (ranges[i][1] * 2)
         ) {
-          map[i][j] = false; //can be part of the maze path
+          map[map.length - 2][j] = false; //can be part of the maze path
+          map[map.length - 1][j] = false;
         } else {
-          map[i][j] = null; //is not part of the maze
+          map[map.length - 2][j] = null; //is not part of the maze
+          map[map.length - 1][j] = null;
         }
       }
     }
-    map[y][x] = true; // is already part of the maze path
+
+    map[y * 2][x * 2] = true; // is already part of the maze path
 
     return map;
   }
@@ -217,40 +208,6 @@ class MazeFactory {
     }
   }
 
-  loopShapedMaze(route, map, random, painters, cyclesDelay) {
-    let direction;
-    const x = route[route.length - 1][0] | 0;
-    const y = route[route.length - 1][1] | 0;
-
-    var directions = [
-      [1, 0], [-1, 0], [0, 1], [0, -1]
-    ],
-      alternatives = this.getShapedMazeAlternatives(map, directions, x, y);
-
-    if (alternatives.length === 0) {
-      this.goBackToLastPathPoint(
-        route,
-        map,
-        random,
-        painters,
-        cyclesDelay
-      );
-
-    } else {
-      this.goToAShapedMazedRandomAlternativePath(
-        alternatives,
-        direction,
-        x,
-        y,
-        route,
-        map,
-        random,
-        painters,
-        cyclesDelay
-      );
-    }
-  }
-
   getAlternatives(map, directions, x, y) {
     const alternatives = [];
 
@@ -258,21 +215,6 @@ class MazeFactory {
       if (
         map[(directions[i][1] + y) * 2] != undefined
         && map[(directions[i][1] + y) * 2][(directions[i][0] + x) * 2] === false
-      ) {
-        alternatives.push(directions[i])
-      }
-    }
-
-    return alternatives;
-  }
-
-  getShapedMazeAlternatives(map, directions, x, y) {
-    const alternatives = [];
-
-    for (var i = 0; i < directions.length; i++) {
-      if (
-        map[directions[i][1] + y] != undefined
-        && map[directions[i][1] + y][directions[i][0] + x] === false
       ) {
         alternatives.push(directions[i])
       }
@@ -328,40 +270,6 @@ class MazeFactory {
 
     map[(direction[1] + y) * 2][(direction[0] + x) * 2] = true;
     map[direction[1] + y * 2][direction[0] + x * 2] = true;
-
-    this.setNextLoopTimeout(
-      route,
-      map,
-      random,
-      painters,
-      cyclesDelay
-    );
-  }
-
-  goToAShapedMazedRandomAlternativePath(
-    alternatives,
-    direction,
-    x,
-    y,
-    route,
-    map,
-    random,
-    painters,
-    cyclesDelay
-  ) {
-    direction = alternatives[random() * alternatives.length | 0];
-    route.push([
-      direction[0] + x,
-      direction[1] + y
-    ]);
-
-    painters.forEach((painter) => {
-      painter.lineTo(direction, x, y);
-      painter.apply();
-    });
-
-    map[direction[1] + y][direction[0] + x] = true;
-    map[direction[1] + y][direction[0] + x] = true;
 
     this.setNextLoopTimeout(
       route,
