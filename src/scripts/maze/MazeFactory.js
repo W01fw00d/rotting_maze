@@ -58,6 +58,7 @@ class MazeFactory {
       startX,
       startY
     );
+    // console.log(this.map);
 
     this.applyMazeGenerationAlgorithm(startX, startY);
   }
