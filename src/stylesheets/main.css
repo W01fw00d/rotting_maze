@@ -13,6 +13,7 @@ canvas {
 
 .canvas_wrapper {
   text-align: center;
+  margin: 0;
 }
 .title {
   color: #a02040;
@@ -20,4 +21,19 @@ canvas {
 
 .button_wrapper {
   display: block;
+}
+
+.audioButton {
+  background-color: #a02040;
+  color: #f5e8eb;
+
+  border-style: solid;
+  border-width: 2px;
+  border-color: #d9a5b2;
+
+  font-size: 18px;
+}
+
+.audioButton.pressed {
+  background-color: #b34c66;
 }
